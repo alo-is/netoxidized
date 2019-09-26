@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import pynetbox, configparser
 from ipaddress import ip_interface
 
@@ -15,7 +16,7 @@ nb = pynetbox.api(
     token=API_TOKEN
 )
 
-def form_output_inventory(inventory_file_path, log_file_path, devices):
+def form_output_inventory(inventory_file_path, devices):
     with open(inventory_file_path, 'w') as inventory_file:
         for item in devices:
             # check if device has an enable secret 
