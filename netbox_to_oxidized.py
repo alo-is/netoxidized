@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-import pynetbox, configparser
+import pynetbox, configparser, requests
 from ipaddress import ip_interface
 
 config = configparser.ConfigParser()
 config.read('/etc/oxidized/netbox.ini')
 
 BASE_API_URL = config.get('base', 'netbox_url')
+RELOAD_API_URL = config.get('base', 'reload_url', fallback=False)
 API_TOKEN = config.get('base', 'netbox_token')
 API_PRIV_KEY = config.get('base', 'netbox_priv_key', fallback='/etc/oxidized/netbox/secret.key')
 INVENTORY_FILE = config.get('base', 'inventory_file', fallback='/etc/oxidized/router.db')
@@ -28,8 +29,13 @@ def form_output_inventory(inventory_file_path, devices):
         inventory_file.close()
 
 
+def reload_oxidized():
+    if RELOAD_API_URL:
+        requests.get(RELOAD_API_URL)
+
 if __name__ == "__main__":
 
     devices = nb.dcim.devices.filter(role=['router','switch'], status='1', has_primary_ip=True)
 
     form_output_inventory(INVENTORY_FILE, devices)
+    reload_oxidized()
