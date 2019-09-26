@@ -23,9 +23,9 @@ def form_output_inventory(inventory_file_path, devices):
             # check if device has an enable secret 
             secret = nb.secrets.secrets.get(device_id=item.id, role='enable')
             if secret:
-                inventory_file.write('{}:{}:{}:{}\n'.format(item.name, ip_interface(item.primary_ip.address).ip, item.platform.slug, secret.plaintext))
+                inventory_file.write('{}|{}|{}|{}\n'.format(item.name, ip_interface(item.primary_ip.address).ip, item.platform.slug, secret.plaintext))
             else:
-                inventory_file.write('{}:{}:{}\n'.format(item.name, ip_interface(item.primary_ip.address).ip, item.platform.slug))
+                inventory_file.write('{}|{}|{}\n'.format(item.name, ip_interface(item.primary_ip.address).ip, item.platform.slug))
         inventory_file.close()
 
 
